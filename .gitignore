@@ -1,0 +1,18 @@
+# cache directories
+Thumbs.db
+*.DS_Store
+*.empty
+
+#projects files
+.idea
+nbproject
+.buildpath
+.project
+.settings
+
+# vendor dir
+/vendor
+
+# composer.lock and phpunit config
+/composer.lock
+/phpunit.xml

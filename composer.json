@@ -1,0 +1,31 @@
+{
+    "name": "sbs/yii2-core-kit",
+    "description": "Contains constantly used approaches when working with Yii2.",
+    "keywords": ["yii2", "extension"],
+    "homepage": "https://github.com/koftikes/yii2-core-kit",
+    "type": "yii2-extension",
+    "license": "Apache License 2.0",
+    "support": {
+        "issues": "https://github.com/koftikes/yii2-core-kit/issues"
+    },
+    "authors": [
+        {
+            "name": "Konstantin Litvinov",
+            "email": "koftikes@gmail.com",
+            "homepage": "http://sbsweb.ru"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=5.4.0",
+        "yiisoft/yii2": "^2.0"
+    },
+    "config": {
+        "process-timeout": 1800
+    },
+    "autoload": {
+        "psr-4": {
+            "sbs\\": "src"
+        }
+    }
+}
