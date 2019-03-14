@@ -21,7 +21,7 @@ use sbs\components\DbMigration;
 class <?= $className ?> extends DbMigration
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function safeUp()
     {
@@ -29,7 +29,7 @@ class <?= $className ?> extends DbMigration
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function safeDown()
     {
