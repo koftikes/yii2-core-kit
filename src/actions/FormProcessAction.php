@@ -8,11 +8,14 @@ use yii\db\ActiveRecord;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
 
+/**
+ * Class FormProcessAction
+ * @package sbs\actions
+ */
 class FormProcessAction extends Action
 {
     /**
-     * @var string the name of the action view.
-     * This property must be set.
+     * @var string the name of the action view. This property must be set.
      */
     public $view;
 
@@ -22,8 +25,7 @@ class FormProcessAction extends Action
     public $scenario = Model::SCENARIO_DEFAULT;
 
     /**
-     * @var string the name of the view action.
-     * This property is need to create the URL when the model is successfully created.
+     * @var string the name of the view action. This property is need to create the URL when the model is successfully created.
      */
     public $viewAction = 'view';
 
@@ -51,7 +53,7 @@ class FormProcessAction extends Action
 
                 return ActiveForm::validate($model);
             }
-            
+
             if ($model->validate()) {
                 $params = $this->success($model);
                 $params = (is_array($params)) ? $params : [$params];

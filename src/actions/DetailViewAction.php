@@ -7,6 +7,10 @@ use yii\base\InvalidConfigException;
 use yii\db\ActiveRecord;
 use yii\widgets\DetailView;
 
+/**
+ * Class DetailViewAction
+ * @package sbs\actions
+ */
 class DetailViewAction extends Action
 {
     /**

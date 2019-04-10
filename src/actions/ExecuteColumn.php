@@ -6,17 +6,21 @@ use kartik\grid\DataColumn;
 use yii\helpers\ArrayHelper;
 
 /**
+ * Class ExecuteColumn
+ *
  * To add a ExecuteColumn to the gridview, add it to the [[GridView::columns|columns]] configuration as follows:
  *
  * ```php
  * 'columns' => [
  *     // ...
  *     [
- *         'class' => ExecuteColumn::className(),
+ *         'class' => ExecuteColumn::class,
  *         // you may configure additional properties here
  *     ],
  * ]
  * ```
+ *
+ * @package sbs\actions
  */
 class ExecuteColumn extends DataColumn
 {

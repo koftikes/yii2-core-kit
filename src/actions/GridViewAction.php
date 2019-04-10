@@ -10,6 +10,10 @@ use yii\db\ActiveRecord;
 use yii\db\ActiveRecordInterface;
 use yii\grid\GridView;
 
+/**
+ * Class GridViewAction
+ * @package sbs\actions
+ */
 class GridViewAction extends Action
 {
     public $filterModel;
@@ -66,7 +70,6 @@ class GridViewAction extends Action
     protected function createWidget()
     {
         $this->gridConfig['dataProvider'] = $this->getDataProvider();
-
         return Yii::createObject(array_merge(['class' => $this->gridClass], $this->gridConfig));
     }
 
