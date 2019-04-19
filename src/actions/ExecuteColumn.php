@@ -2,7 +2,7 @@
 
 namespace sbs\actions;
 
-use kartik\grid\DataColumn;
+use yii\grid\DataColumn;
 use yii\helpers\ArrayHelper;
 
 /**
