@@ -8,8 +8,7 @@ use yii\web\BadRequestHttpException;
 use yii\web\ServerErrorHttpException;
 
 /**
- * Class UpdateAction
- * @package backend\actions
+ * Class UpdateAction.
  */
 class UpdateAction extends FormProcessAction
 {
@@ -19,13 +18,17 @@ class UpdateAction extends FormProcessAction
     public $view = 'update';
 
     /**
-     * @param null $id
-     * @return array|string
+     * @param mixed $id
+     *
      * @throws BadRequestHttpException
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\web\NotFoundHttpException
+     *
+     * @return array|string
      */
     public function run($id = null)
     {
-        if ($id == null) {
+        if (null === $id) {
             throw new BadRequestHttpException(Yii::t('yii', 'Missing required parameters: {params}', ['params' => ' id']));
         }
 
@@ -34,12 +37,14 @@ class UpdateAction extends FormProcessAction
 
     /**
      * @param ActiveRecord $model
-     * @return array
+     *
      * @throws ServerErrorHttpException
+     *
+     * @return bool|void
      */
     public function success(ActiveRecord $model)
     {
-        if (parent::success($model) === false && !$model->hasErrors()) {
+        if (false === parent::success($model) && !$model->hasErrors()) {
             throw new ServerErrorHttpException('Failed to update record by unknown reason.');
         }
     }

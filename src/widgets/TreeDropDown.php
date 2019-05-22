@@ -2,54 +2,53 @@
 
 namespace sbs\widgets;
 
+use yii\base\InvalidConfigException;
 use yii\base\Model;
 use yii\base\Widget;
-use yii\helpers\Html;
+use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
-use yii\base\InvalidConfigException;
+use yii\helpers\Html;
 
 /**
- * Class DropDownTree
- *
- * @package sbs\widgets
+ * Class DropDownTree.
  */
 class TreeDropDown extends Widget
 {
     /**
-     * @var Model|null the data model that this widget is associated with.
+     * @var Model the data model that this widget is associated with
      */
     public $model;
 
     /**
-     * @var string|null the model attribute that this widget is associated with.
+     * @var string the model attribute that this widget is associated with
      */
     public $attribute;
 
     /**
-     * @var string|null the input name. This must be set if [[model]] and [[attribute]] are not set.
+     * @var string the input name. This must be set if [[model]] and [[attribute]] are not set.
      */
     public $name;
 
     /**
-     * @var string the selected value.
+     * @var string the selected value
      */
     public $value;
 
     /**
-     * @var array The HTML attribute options for the input tag.
+     * @var array the HTML attribute options for the input tag
      *
-     * @see yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
+     * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $options = [];
 
     /**
-     * @var yii\db\ActiveQuery the query that will be used as the data source for the TreeSelect.
-     * For example: `TreeModel::find()->where(['parent_id' => null])`
+     * @var \yii\db\ActiveQuery the query that will be used as the data source for the TreeSelect.
+     *                          For example: `TreeModel::find()->where(['parent_id' => null])`
      */
     public $query;
 
     /**
-     * @var mixed list of IDs to exlude from select
+     * @var mixed list of IDs to exclude from select
      */
     public $exclude;
 
@@ -59,17 +58,17 @@ class TreeDropDown extends Widget
     public $idAttribute = 'id';
 
     /**
-     * @var string name of select option attribute.
+     * @var string name of select option attribute
      */
     public $nameAttribute = 'name';
 
     /**
-     * @var string name of parent relation attribute.
+     * @var string name of parent relation attribute
      */
     public $parentIdAttribute = 'parent_id';
 
     /**
-     * @var array list of items in the nav widget.
+     * @var array list of items in the nav widget
      */
     private $items = [];
 
@@ -78,13 +77,13 @@ class TreeDropDown extends Widget
      */
     public function init()
     {
-        if ($this->name === null && $this->attribute === null && !$this->hasModel()) {
+        if (null === $this->name && null === $this->attribute && !$this->hasModel()) {
             throw new InvalidConfigException("Either 'name', or 'model' and 'attribute' properties must be specified.");
         }
         if (!isset($this->options['id'])) {
             $this->options['id'] = $this->hasModel() ? Html::getInputId($this->model, $this->attribute) : $this->getId();
         }
-        $this->exclude = is_array($this->exclude) ?: [$this->exclude];
+        $this->exclude = \is_array($this->exclude) ?: [$this->exclude];
 
         parent::init();
     }
@@ -100,27 +99,27 @@ class TreeDropDown extends Widget
             Html::addCssClass($this->options, 'form-control');
 
             return Html::activeDropDownList($this->model, $this->attribute, $this->items, $this->options);
-        } else {
-            return Html::dropDownList($this->name, $this->value, $this->items, $this->options);
         }
+
+        return Html::dropDownList($this->name, $this->value, $this->items, $this->options);
     }
 
     /**
-     * @return boolean whether this widget is associated with a data model.
+     * @return bool whether this widget is associated with a data model
      */
     protected function hasModel()
     {
-        return $this->model instanceof Model && $this->attribute !== null;
+        return $this->model instanceof Model && null !== $this->attribute;
     }
 
     private function buildTree($tree, $pass = 0)
     {
         $result = [];
         foreach ($tree as $node) {
-            if (in_array($node->{$this->idAttribute}, $this->exclude)) {
+            if (\in_array($node->{$this->idAttribute}, $this->exclude, true)) {
                 continue;
             }
-            $result[$node->{$this->idAttribute}] = str_repeat('-', $pass) . ' ' . $node->{$this->nameAttribute};
+            $result[$node->{$this->idAttribute}] = \str_repeat('-', $pass) . ' ' . $node->{$this->nameAttribute};
 
             if ($this->childrenQuery($node)->count()) {
                 $result = ArrayHelper::merge($result, $this->buildTree($this->childrenQuery($node)->all(), $pass + 1));
@@ -131,12 +130,12 @@ class TreeDropDown extends Widget
     }
 
     /**
-     * @param $node yii\db\Model
+     * @param ActiveRecord $node
      *
-     * @return yii\db\ActiveQuery
+     * @return \yii\db\ActiveQuery
      */
     private function childrenQuery($node)
     {
-        return $node->hasMany(get_class($node), [$this->parentIdAttribute => $this->idAttribute]);
+        return $node->hasMany(\get_class($node), [$this->parentIdAttribute => $this->idAttribute]);
     }
 }

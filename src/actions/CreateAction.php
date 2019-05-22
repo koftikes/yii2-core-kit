@@ -2,13 +2,11 @@
 
 namespace sbs\actions;
 
-use Yii;
 use yii\db\ActiveRecord;
 use yii\web\ServerErrorHttpException;
 
 /**
- * Class CreateAction
- * @package sbs\actions
+ * Class CreateAction.
  */
 class CreateAction extends FormProcessAction
 {
@@ -19,17 +17,19 @@ class CreateAction extends FormProcessAction
 
     /**
      * @param ActiveRecord $model
-     * @return array
+     *
      * @throws ServerErrorHttpException
+     *
+     * @return array|bool
      */
     public function success(ActiveRecord $model)
     {
-        if (parent::success($model) === false && !$model->hasErrors()) {
+        if (false === parent::success($model) && !$model->hasErrors()) {
             throw new ServerErrorHttpException('Failed to create record by unknown reason.');
         }
 
         if ($this->redirectToView) {
-            $id = implode(',', array_values($model->getPrimaryKey(true)));
+            $id = \implode(',', \array_values($model->getPrimaryKey(true)));
 
             return ['route' => [$this->viewAction, 'id' => $id]];
         }

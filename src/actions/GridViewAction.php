@@ -7,32 +7,29 @@ use yii\base\InvalidConfigException;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveQueryInterface;
 use yii\db\ActiveRecord;
-use yii\db\ActiveRecordInterface;
-use yii\grid\GridView;
 
 /**
- * Class GridViewAction
- * @package sbs\actions
+ * Class GridViewAction.
  */
 class GridViewAction extends Action
 {
     public $filterModel;
 
     /**
-     * @var string the name of the action view.
+     * @var string the name of the action view
      */
     public $view = 'index';
 
     /**
      * @var string class name which will be show detail info.
-     * The class must implement [[BaseListView]].
-     * This property must be set.
+     *             The class must implement [[BaseListView]].
+     *             This property must be set.
      */
     public $gridClass;
 
     /**
      * @var array a list of attributes to be displayed in the detail view.
-     * Each array element represents the specification for displaying one particular attribute.
+     *            Each array element represents the specification for displaying one particular attribute.
      */
     public $gridConfig = [];
 
@@ -42,18 +39,21 @@ class GridViewAction extends Action
 
     /**
      * {@inheritdoc}
+     *
+     * @throws InvalidConfigException
      */
     public function init()
     {
-        if ($this->gridClass === null) {
-            throw new InvalidConfigException(get_class($this) . '::$gridClass must be set.');
+        if (null === $this->gridClass) {
+            throw new InvalidConfigException(\get_class($this) . '::$gridClass must be set.');
         }
         parent::init();
     }
 
     /**
-     * @return string
      * @throws InvalidConfigException
+     *
+     * @return string
      */
     public function run()
     {
@@ -64,37 +64,41 @@ class GridViewAction extends Action
     }
 
     /**
-     * @return GridView
      * @throws InvalidConfigException
+     *
+     * @return \yii\grid\GridView
      */
     protected function createWidget()
     {
         $this->gridConfig['dataProvider'] = $this->getDataProvider();
-        return Yii::createObject(array_merge(['class' => $this->gridClass], $this->gridConfig));
+        /** @var \yii\grid\GridView $grid */
+        $grid = Yii::createObject(\array_merge(['class' => $this->gridClass], $this->gridConfig));
+
+        return $grid;
     }
 
     /**
-     * Create data provider instance with search query applied
-     * @return ActiveDataProvider
+     * Create data provider instance with search query applied.
+     *
      * @throws InvalidConfigException
+     *
+     * @return ActiveDataProvider
      */
     public function getDataProvider()
     {
-        /* @var $modelClass ActiveRecordInterface */
-        $modelClass = $this->modelClass;
         /** @var ActiveQueryInterface $query */
-        $query = $modelClass::find();
+        $query = $this->modelClass::find();
 
         if ($this->withFilters) {
             /** @var ActiveRecord $filterModel */
-            $filterModel = new $modelClass;
+            $filterModel             = new $this->modelClass();
             $filterModel->attributes = [];
 
-            if (!method_exists($filterModel, 'applyFilter')) {
-                throw new InvalidConfigException(get_class($filterModel) . ' must define a "applyFilter()" method.');
+            if (!\method_exists($filterModel, 'applyFilter')) {
+                throw new InvalidConfigException(\get_class($filterModel) . ' must define a "applyFilter()" method.');
             }
 
-            if (Yii::$app->request->queryParams && method_exists($filterModel, 'applyFilter')) {
+            if (Yii::$app->request->queryParams && \method_exists($filterModel, 'applyFilter')) {
                 $filterModel->load(Yii::$app->request->queryParams);
                 $query = $filterModel->applyFilter($query);
             }

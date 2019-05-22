@@ -4,53 +4,53 @@ namespace sbs\actions;
 
 use Yii;
 use yii\base\InvalidConfigException;
-use yii\db\ActiveRecord;
-use yii\widgets\DetailView;
 
 /**
- * Class DetailViewAction
- * @package sbs\actions
+ * Class DetailViewAction.
  */
 class DetailViewAction extends Action
 {
     /**
-     * @var string the name of the action view.
+     * @var string the name of the action view
      */
     public $view = 'view';
 
     /**
-     * @var string class name which will be show detail info.
-     * The class must implement [[DetailView]].
-     * This property must be set.
+     * @var string class name which will be show detail info. The class must implement [[DetailView]].
      */
     public $detailClass;
 
     /**
      * @var array a list of attributes to be displayed in the detail view.
-     * Each array element represents the specification for displaying one particular attribute.
+     *            Each array element represents the specification for displaying one particular attribute.
      */
     public $detailConfig = [];
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     *
+     * @throws InvalidConfigException
      */
     public function init()
     {
-        if ($this->detailClass === null) {
-            throw new InvalidConfigException(get_class($this) . '::$detailClass must be set.');
+        if (null === $this->detailClass) {
+            throw new InvalidConfigException(\get_class($this) . '::$detailClass must be set.');
         }
+
         parent::init();
     }
 
     /**
-     * @param $id
-     * @return mixed
+     * @param mixed $id
+     *
      * @throws InvalidConfigException
+     * @throws \yii\web\NotFoundHttpException
+     *
+     * @return string
      */
     public function run($id)
     {
-        /* @var $model ActiveRecord */
-        $model = $this->findModel($id);
+        $model                       = $this->findModel($id);
         $this->detailConfig['model'] = $model;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -64,23 +64,24 @@ class DetailViewAction extends Action
     }
 
     /**
-     * @return DetailView
      * @throws InvalidConfigException
+     *
+     * @return \yii\widgets\DetailView
      */
     protected function createWidget()
     {
-        /** @var DetailView $widget */
-        $widget = Yii::createObject(array_merge(['class' => $this->detailClass], $this->detailConfig));
+        /** @var \yii\widgets\DetailView $widget */
+        $widget = Yii::createObject(\array_merge(['class' => $this->detailClass], $this->detailConfig));
 
         foreach ($widget->attributes as $k => $i) {
-            if (!isset($i['value']) || !is_string($i['value'])) {
+            if (!isset($i['value']) || !\is_string($i['value'])) {
                 continue;
             }
-            if (strpos($i['value'], '$model') !== false || strpos($i['value'], '$data') !== false) {
-                $val = str_replace(['$model', '$data'], '$widget->model', $i['value']);
-                ob_start();
-                eval("echo $val;");
-                $value = ob_get_clean();
+            if (false !== \mb_strpos($i['value'], '$model') || false !== \mb_strpos($i['value'], '$data')) {
+                $val = \str_replace(['$model', '$data'], '$widget->model', $i['value']);
+                \ob_start();
+                eval("echo ${val};");
+                $value                           = \ob_get_clean();
                 $widget->attributes[$k]['value'] = $value;
             }
         }
