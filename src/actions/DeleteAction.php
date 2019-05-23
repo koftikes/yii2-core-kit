@@ -3,33 +3,29 @@
 namespace sbs\actions;
 
 use Yii;
-use yii\base\Exception;
-use yii\db\ActiveRecord;
 use yii\web\ServerErrorHttpException;
 
 /**
- * Class DeleteAction
- * @package backend\actions
+ * Class DeleteAction.
  */
 class DeleteAction extends Action
 {
     /**
      * Deletes a model.
-     * @param mixed $id id of the model to be deleted.
-     * @throws ServerErrorHttpException on failure.
+     *
+     * @param mixed $id id of the model to be deleted
+     *
+     * @throws \yii\base\InvalidConfigException
      */
     public function run($id)
     {
         try {
-            /* @var $model ActiveRecord */
             $model = $this->findModel($id);
-
-            if ($model->delete() === false) {
+            if (false === $model->delete()) {
                 throw new ServerErrorHttpException('Failed to delete record by unknown reason.');
             }
             Yii::$app->session->setFlash(self::EVENT_SUCCESS, 'Record was deleted.');
-
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
             Yii::$app->session->setFlash(self::EVENT_ERROR, $e->getMessage());
         }
 

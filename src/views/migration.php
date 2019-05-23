@@ -3,10 +3,10 @@
  * This view is used by console/controllers/MigrateController.php.
  *
  * The following variables are available in this view:
+ *
+ * @var string the new migration class name without namespace
+ * @var string $namespace the new migration class namespace
  */
-/* @var $className string the new migration class name without namespace */
-/* @var $namespace string the new migration class namespace */
-
 echo "<?php\n";
 if (!empty($namespace)) {
     echo "\nnamespace {$namespace};\n";
@@ -16,9 +16,9 @@ if (!empty($namespace)) {
 use sbs\components\DbMigration;
 
 /**
- * Class <?= $className . "\n" ?>
+ * Class <?= $className . "\n"; ?>
  */
-class <?= $className ?> extends DbMigration
+class <?= $className; ?> extends DbMigration
 {
     /**
      * {@inheritdoc}
@@ -33,7 +33,7 @@ class <?= $className ?> extends DbMigration
      */
     public function safeDown()
     {
-        echo "<?= $className ?> cannot be reverted.\n";
+        echo "<?= $className; ?> cannot be reverted.\n";
 
         return false;
     }

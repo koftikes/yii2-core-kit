@@ -3,13 +3,14 @@
 namespace sbs\behaviors;
 
 use Yii;
-use yii\web\User;
 use yii\base\Behavior;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
+use yii\web\User;
 
 /**
  * LastVisitBehavior automatically fills the specified attribute with the current datetime.
- * To use behavior, insert the following code to your config file:
+ * To use behavior, insert the following code to your config file:.
  *
  * ```php
  *
@@ -25,12 +26,11 @@ use yii\behaviors\TimestampBehavior;
  * ```
  *
  * Class LastVisitBehavior
- * @package sbs\behaviors
  */
 class LastVisitBehavior extends Behavior
 {
     /**
-     * @var string the attribute that will receive last visit datetime.
+     * @var string the attribute that will receive last visit datetime
      */
     public $attribute = 'last_visit';
 
@@ -45,14 +45,14 @@ class LastVisitBehavior extends Behavior
     }
 
     /**
-     * @param $event \yii\web\UserEvent
+     * @param \yii\web\UserEvent $event
      */
     public function afterLogin($event)
     {
+        /** @var ActiveRecord $user */
         $user = $event->identity;
         if (!$user->hasMethod('touch')) {
-            throw new \BadMethodCallException('For "' . __CLASS__ . '" require to use "'
-                . TimestampBehavior::class . '" in "' . Yii::$app->components['user']['identityClass'] . '".');
+            throw new \BadMethodCallException('For "' . __CLASS__ . '" require to use "' . TimestampBehavior::class . '" in "' . Yii::$app->components['user']['identityClass'] . '".');
         }
         $user->touch($this->attribute);
         $user->save(false);

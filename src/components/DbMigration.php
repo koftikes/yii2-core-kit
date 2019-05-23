@@ -7,14 +7,14 @@ use yii\db\Migration;
 class DbMigration extends Migration
 {
     /**
-     * get options for schema
+     * Get options for schema.
      *
-     * @return string options
+     * @return null|string
      */
     public function getOptions()
     {
         $tableOptions = null;
-        if ($this->db->driverName === 'mysql') {
+        if ('mysql' === $this->db->driverName) {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
         }
 

@@ -9,8 +9,7 @@ use yii\web\Response;
 use yii\widgets\ActiveForm;
 
 /**
- * Class FormProcessAction
- * @package sbs\actions
+ * Class FormProcessAction.
  */
 class FormProcessAction extends Action
 {
@@ -20,7 +19,7 @@ class FormProcessAction extends Action
     public $view;
 
     /**
-     * @var string the scenario to be assigned to the new model before it is validated and saved.
+     * @var string the scenario to be assigned to the new model before it is validated and saved
      */
     public $scenario = Model::SCENARIO_DEFAULT;
 
@@ -32,13 +31,16 @@ class FormProcessAction extends Action
     public $redirectToView = false;
 
     /**
-     * @param integer $id
+     * @param mixed $id
+     *
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\web\NotFoundHttpException
+     *
      * @return array|string
      */
     public function run($id = null)
     {
-        /** @var ActiveRecord $model */
-        if ($id === null) {
+        if (null === $id) {
             $model = new $this->modelClass();
         } else {
             $model = $this->findModel($id);
@@ -55,9 +57,8 @@ class FormProcessAction extends Action
             }
 
             if ($model->validate()) {
-                $params = $this->success($model);
-                $params = (is_array($params)) ? $params : [$params];
-                $this->handler(self::EVENT_SUCCESS, $params);
+                $this->success($model);
+                $this->handler(self::EVENT_SUCCESS);
             } else {
                 $this->error($model);
                 $this->handler(self::EVENT_ERROR);
@@ -71,6 +72,7 @@ class FormProcessAction extends Action
 
     /**
      * @param ActiveRecord $model
+     *
      * @return bool
      */
     protected function success(ActiveRecord $model)
@@ -91,6 +93,7 @@ class FormProcessAction extends Action
 
     /**
      * @param ActiveRecord $model
+     *
      * @return string
      */
     protected function response(ActiveRecord $model)

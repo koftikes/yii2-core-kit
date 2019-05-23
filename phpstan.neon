@@ -1,0 +1,15 @@
+includes:
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+parameters:
+    ignoreErrors:
+        -
+            message: '#Call to an undefined method [a-zA-Z0-9\\_]+::touch\(\).#'
+            path: */behaviors/LastVisitBehavior.php
+        -
+            message: '#Cannot access property \$driverName on [a-zA-Z0-9\\_]+.#'
+            path: */components/DbMigration.php
+        - '#Access to static property \$app on an unknown class Yii.#'
+        - '#Call to static method [a-zA-Z0-9\\_]+\(\) on an unknown class Yii.#'
+
+    excludes_analyse:
+        - */views/migration.php
